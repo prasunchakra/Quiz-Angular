@@ -1,0 +1,21 @@
+<div class="max-w-md mx-auto p-6 bg-white shadow rounded mt-10 text-center">
+  <h2 class="text-2xl font-bold mb-4 text-green-700">🎉 Test Submitted!</h2>
+
+  <p class="text-lg text-gray-700">
+    You scored:
+    <span class="text-blue-600 font-semibold text-2xl">{{ scoredMarks }}</span>
+    out of
+    <span class="text-gray-800 font-medium">{{ totalMarks }}</span>
+  </p>
+
+  <div class="mt-6 text-sm text-gray-500">
+    (Subjective and file-based questions are not auto-evaluated.)
+  </div>
+
+  <button
+    class="mt-8 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded"
+    routerLink="/"
+  >
+    Go to Start
+  </button>
+</div>

@@ -1,0 +1,65 @@
+<div class="flex gap-6 px-6 py-6">
+  <!-- Left: Question Area -->
+  <div class="flex-1">
+    <div class="flex justify-between items-center mb-2">
+      <h2 class="text-lg font-semibold">Question {{ currentIndex + 1 }}</h2>
+      <span class="text-sm text-gray-600">Subject Tabs (Coming Soon)</span>
+    </div>
+
+    <div class="border p-4 rounded bg-white shadow">
+      <ng-container *ngIf="currentQuestion">
+        <app-question-renderer [question]="currentQuestion" />
+      </ng-container>
+    </div>
+
+    <div class="flex flex-wrap justify-between items-center mt-6 gap-4">
+      <button
+        class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded"
+        (click)="goPrev()"
+      >
+        Previous
+      </button>
+      <div class="flex gap-3">
+        <button
+          class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded"
+          (click)="clearAnswer()"
+        >
+          Clear Selection
+        </button>
+
+        <button
+          class="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded"
+          (click)="markForReview()"
+        >
+          Review Later
+        </button>
+      </div>
+
+      <button
+        class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded ml-auto"
+        (click)="saveAndNext()"
+      >
+        Save & Next
+      </button>
+      <button
+        class="mt-4 px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600"
+        (click)="endTest()"
+      >
+        END TEST
+      </button>
+    </div>
+
+<!--    <div class="flex justify-between mt-4">-->
+<!--      <button (click)="goPrev()" class="px-4 py-2 bg-gray-200 rounded" [disabled]="currentIndex === 0">-->
+<!--        Previous-->
+<!--      </button>-->
+<!--      <button (click)="goNext()" class="px-4 py-2 bg-blue-500 text-white rounded">-->
+<!--        Next-->
+<!--      </button>-->
+<!--    </div>-->
+  </div>
+
+  <!-- Right: Navigation Panel -->
+  <app-question-nav-panel />
+
+</div>
