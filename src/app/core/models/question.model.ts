@@ -1,20 +1,26 @@
-import { QuestionType } from '../enums/question-type.enum';
+import { QuestionType } from '../enterface/question-type.enum';
 
 export interface Question {
   id: string;
   type: QuestionType;
   text: string;
-  options?: string[]; // For MCQ, MR, TrueFalse
-  correctAnswer?: any; // For evaluation
+  options: string[] | null;
+  correctAnswer: string;
   section: string;
   marks: number;
-  negativeMarks?: number;
-  metadata?: Record<string, any>;
+  metadata: Record<string, any> | null;
+  difficulty: 'Easy' | 'Medium' | 'Hard';
+  status: 'Draft' | 'Published' | 'Archived';
+  explanation: string | null;
+  tags: string[] | null;
+  wrongAnswerFeedback: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Answer {
   questionId: string;
-  value: any; // String, array, number, or file
-  markedForReview?: boolean;
-  visited?: boolean;
+  value: string | number | boolean | Record<string, number> | Record<string, string> | string[];
+  markedForReview: boolean;
 }
+

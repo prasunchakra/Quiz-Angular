@@ -8,7 +8,7 @@ import {StateService} from '../../core/services/state.service';
   imports: [CommonModule],
   template: `
     <div>
-      <p class="mb-4 font-medium">{{ question?.text }}</p>
+      <p class="mb-4 font-medium">{{ question.text }}</p>
 
       <input
         type="file"
@@ -30,8 +30,8 @@ export class FileUploadComponent {
 
   ngOnInit() {
     const saved = this.state.getAnswerForQuestion(this.question.id);
-    if (saved && saved.value?.name) {
-      this.fileName.set(saved.value.name);
+    if (saved && typeof saved.value === 'string') {
+      this.fileName.set(saved.value);
     }
   }
 
@@ -43,7 +43,8 @@ export class FileUploadComponent {
 
       this.state.saveAnswer({
         questionId: this.question.id,
-        value: file
+        value: file.name, //TODO: change to file object/url
+        markedForReview: false
       });
     }
   }

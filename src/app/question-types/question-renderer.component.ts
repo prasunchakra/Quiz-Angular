@@ -1,7 +1,7 @@
-import {Component, Input, ViewChild, ViewContainerRef, SimpleChanges, OnChanges} from '@angular/core';
+import {Component, Input, ViewChild, ViewContainerRef, SimpleChanges, OnChanges, EventEmitter, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Question } from '../core/models/question.model';
-import { QuestionType } from '../core/enums/question-type.enum';
+import { QuestionType } from '../core/enterface/question-type.enum';
 
 // Import all components
 import { McqComponent } from './mcq/mcq.component';
@@ -20,7 +20,7 @@ import { MultipleResponseComponent } from './multiple-response/multiple-response
   imports: [CommonModule],
   template: `<ng-container #container></ng-container>`,
 })
-export class QuestionRendererComponent implements OnChanges {
+export class QuestionRendererComponent implements OnChanges, OnInit {
   @Input() question!: Question;
   @ViewChild('container', { read: ViewContainerRef, static: true }) container!: ViewContainerRef;
 
@@ -43,6 +43,10 @@ export class QuestionRendererComponent implements OnChanges {
     }
   }
 
+  ngOnInit() {
+        
+  }
+
   loadComponent() {
     const componentToRender = this.componentMap[this.question.type];
     if (!componentToRender) return;
@@ -50,5 +54,6 @@ export class QuestionRendererComponent implements OnChanges {
     this.container.clear();
     const componentRef = this.container.createComponent(componentToRender);
     componentRef.setInput('question', this.question);
+
   }
 }

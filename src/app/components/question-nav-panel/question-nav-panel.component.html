@@ -5,10 +5,9 @@
       *ngFor="let q of questions; index as i"
       (click)="goTo(i)"
       [ngClass]="{
-        'bg-green-500 text-white': getStatus(i) === 'answered',
-        'bg-red-500 text-white': getStatus(i) === 'not-answered',
-        'bg-purple-500 text-white': getStatus(i) === 'marked',
-        'bg-gray-200': getStatus(i) === 'not-visited'
+        'bg-green-500 text-white': getStatus(i) === AnswerStatus.ANSWERED,
+        'bg-purple-500 text-white': getStatus(i) === AnswerStatus.MARKED,
+        'bg-gray-200': getStatus(i) === AnswerStatus.NOT_ANSWERED
       }"
       class="w-10 h-10 rounded text-sm font-medium"
     >
@@ -18,8 +17,7 @@
 
   <div class="mt-4 space-y-1 text-sm text-gray-600">
     <div><span class="inline-block w-3 h-3 bg-green-500 mr-2 rounded"></span> Answered</div>
-    <div><span class="inline-block w-3 h-3 bg-red-500 mr-2 rounded"></span> Not Answered</div>
     <div><span class="inline-block w-3 h-3 bg-purple-500 mr-2 rounded"></span> Marked for Review</div>
-    <div><span class="inline-block w-3 h-3 bg-gray-300 mr-2 rounded"></span> Not Visited</div>
+    <div><span class="inline-block w-3 h-3 bg-gray-300 mr-2 rounded"></span> Not Answered</div>
   </div>
 </div>

@@ -8,9 +8,17 @@ import {Router} from '@angular/router';
   styleUrl: './start.component.scss'
 })
 export class StartComponent {
-  constructor(private router: Router) {}
+  quizId = sessionStorage.getItem('quizId') || 'bbc9de2a-8046-49e4-a85d-b07254f3f908';
+
+  constructor(private router: Router) {
+    sessionStorage.setItem('quizId', this.quizId);
+  }
 
   startQuiz() {
-    this.router.navigate(['/countdown']);
+    this.router.navigate(['/countdown'], {
+      queryParams: {
+        quiz: this.quizId
+      }
+    });
   }
 }

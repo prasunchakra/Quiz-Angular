@@ -8,7 +8,7 @@ import {CommonModule} from '@angular/common';
   imports: [CommonModule],
   template: `
     <div>
-      <p class="mb-4 font-medium">{{ question?.text }}</p>
+      <p class="mb-4 font-medium">{{ question.text }}</p>
       <div class="space-y-2">
         <label *ngFor="let option of ['True', 'False']" class="block">
           <input
@@ -32,7 +32,7 @@ export class TrueFalseComponent {
   ngOnInit() {
     const saved = this.state.getAnswerForQuestion(this.question.id);
     if (saved) {
-      this.selected.set(saved.value);
+      this.selected.set(saved.value as string);
     }
   }
 
@@ -40,7 +40,8 @@ export class TrueFalseComponent {
     this.selected.set(option);
     this.state.saveAnswer({
       questionId: this.question.id,
-      value: option
+      value: option,
+      markedForReview: false
     });
   }
 }

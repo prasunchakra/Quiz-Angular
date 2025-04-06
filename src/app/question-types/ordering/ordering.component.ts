@@ -8,8 +8,7 @@ import {StateService} from '../../core/services/state.service';
   imports: [CommonModule],
   template: `
     <div>
-      <p class="mb-4 font-medium">{{ question?.text }}</p>
-
+      <p class="mb-4 font-medium">{{ question.text }}</p>
       <div class="space-y-4">
         <div *ngFor="let option of question.options" class="flex items-center gap-4">
           <span class="w-2/3 font-medium">{{ option }}</span>
@@ -32,11 +31,10 @@ export class OrderingComponent {
   orderIndexes: number[] = [];
 
   ngOnInit() {
-    // @ts-ignore
-    this.orderIndexes = this.question? this.question.options.map((_, idx) => idx + 1): [];
+    this.orderIndexes = this.question.options ? this.question.options.map((_, idx) => idx + 1): [];
     const saved = this.state.getAnswerForQuestion(this.question.id);
     if (saved) {
-      this.selected.set({ ...saved.value });
+      this.selected.set(saved.value as Record<string, number>);
     }
   }
 
@@ -47,7 +45,8 @@ export class OrderingComponent {
 
     this.state.saveAnswer({
       questionId: this.question.id,
-      value: current
+      value: current,
+      markedForReview: false
     });
   }
 }

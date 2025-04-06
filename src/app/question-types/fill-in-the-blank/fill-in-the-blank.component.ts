@@ -8,7 +8,7 @@ import {StateService} from '../../core/services/state.service';
   imports: [CommonModule],
   template: `
     <div>
-      <p class="mb-4 font-medium">{{ question?.text }}</p>
+      <p class="mb-4 font-medium">{{ question.text }}</p>
       <input
         type="text"
         [value]="value()"
@@ -26,7 +26,7 @@ export class FillInTheBlankComponent {
   ngOnInit() {
     const saved = this.state.getAnswerForQuestion(this.question.id);
     if (saved) {
-      this.value.set(saved.value);
+      this.value.set(saved.value as string  );
     }
   }
 
@@ -37,7 +37,8 @@ export class FillInTheBlankComponent {
 
     this.state.saveAnswer({
       questionId: this.question.id,
-      value: val
+      value: val,
+      markedForReview: false
     });
   }
 }

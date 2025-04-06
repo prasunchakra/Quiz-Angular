@@ -1,57 +1,105 @@
 import { Injectable, signal } from '@angular/core';
 import { Answer, Question } from '../models/question.model';
-
+import { Quiz } from '../models/quiz.model';
 @Injectable({
   providedIn: 'root'
 })
 export class StateService {
-  questions = signal<Question[]>([]);
+  currentQuiz = signal<Quiz | null>(null);
+  numberOfQuestions = 0;
   currentQuestionIndex = signal(0);
-  answers = signal<Answer[]>([]);
-
-  setQuestions(questions: Question[]) {
-    this.questions.set(questions);
+  currentQuestion = signal<Question | null>(null);
+  answers = signal<Record<string, Answer>>({});
+  setQuiz(quiz: Quiz) {
+    this.currentQuiz.set(quiz);
+    this.numberOfQuestions = quiz.questions.length;
+    sessionStorage.setItem('currentQuiz', JSON.stringify(quiz));
   }
-
+  
+  loadStoredQuiz(): Quiz | null {
+    const storedQuiz = sessionStorage.getItem('currentQuiz');
+    if (!storedQuiz) return null;
+    
+    const quiz = JSON.parse(storedQuiz);
+    this.setQuiz(quiz);
+    return quiz;
+  }
   saveAnswer(answer: Answer) {
     const all = this.answers();
-    const existing = all.find(a => a.questionId === answer.questionId);
-    if (existing) {
-      Object.assign(existing, answer);
-    } else {
-      all.push(answer);
-    }
-    this.answers.set([...all]);
+    const newAnswer: Answer = {
+      questionId: answer.questionId,
+      value: answer.value,
+      markedForReview: answer.markedForReview
+    };
+    this.answers.set({ ...all, [answer.questionId]: newAnswer });
   }
 
   getAnswerForQuestion(questionId: string): Answer | undefined {
-    return this.answers().find(a => a.questionId === questionId);
+    return this.answers()[questionId];
+  }
+  getAnswers(): Record<string, Answer> {
+    return this.answers();
+  }
+  getNumberOfQuestions(): number {
+    return this.numberOfQuestions;
   }
 
   getCurrentQuestion(): Question | undefined {
-    return this.questions()[this.currentQuestionIndex()];
+    let quiz : Quiz | null = this.currentQuiz();
+    if (!quiz) {
+      const storedQuiz = sessionStorage.getItem('currentQuiz');
+      if (!storedQuiz) return undefined;
+      quiz = JSON.parse(storedQuiz);
+    }
+    return quiz?.questions[this.currentQuestionIndex()];
+  }
+  setCurrentQuestion(question: Question) {
+    this.currentQuestion.set(question);
   }
 
   goTo(index: number) {
-    console.log('Going to question', index);
-    if (index >= 0 && index < this.questions().length) {
+    const quiz = this.currentQuiz() ?? this.loadStoredQuiz();
+    if (quiz && index >= 0 && index < quiz.questions.length) {
       this.currentQuestionIndex.set(index);
     }
   }
 
   markForReview(questionId: string) {
     const all = this.answers();
-    const existing = all.find(a => a.questionId === questionId);
+    const existing = all[questionId];
     if (existing) {
-      existing.markedForReview = true;
+      this.answers.set({ 
+        ...all, 
+        [questionId]: { ...existing, markedForReview: true }
+      });
     } else {
-      all.push({ questionId, value: '', markedForReview: true });
+      this.answers.set({ 
+        ...all, 
+        [questionId]: { questionId, value: '', markedForReview: true }
+      });
     }
-    this.answers.set([...all]);
   }
 
   clearAnswer(questionId: string) {
-    const all = this.answers().filter(a => a.questionId !== questionId);
-    this.answers.set([...all]);
+    const all = { ...this.answers() };
+    delete all[questionId];
+    this.answers.set(all);
+  }
+
+  initializeFromStorage() {
+    const storedQuiz = sessionStorage.getItem('currentQuiz');
+    if (storedQuiz) {
+      const quiz = JSON.parse(storedQuiz);
+      this.setQuiz(quiz);
+    }
+  }
+  clearCurrentQuiz() {
+    this.currentQuiz.set(null);
+    this.answers.set({});
+    this.currentQuestionIndex.set(0);
+    this.currentQuestion.set(null);
+    sessionStorage.removeItem('currentQuiz');
+    sessionStorage.removeItem('submission');
+    sessionStorage.removeItem('quizId');
   }
 }

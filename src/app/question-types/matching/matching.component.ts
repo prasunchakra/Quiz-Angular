@@ -8,7 +8,7 @@ import {StateService} from '../../core/services/state.service';
   imports: [CommonModule],
   template: `
     <div>
-      <p class="mb-4 font-medium">{{ question?.text }}</p>
+      <p class="mb-4 font-medium">{{ question.text }}</p>
 
       <div class="space-y-4">
         <div *ngFor="let left of question.options" class="flex items-center gap-4">
@@ -36,7 +36,7 @@ export class MatchingComponent {
     this.matches = this.question.metadata['matches'] || [];
     const saved = this.state.getAnswerForQuestion(this.question.id);
     if (saved) {
-      this.selected.set({ ...saved.value });
+      this.selected.set(saved.value as Record<string, string>);
     }
   }
 
@@ -47,7 +47,8 @@ export class MatchingComponent {
 
     this.state.saveAnswer({
       questionId: this.question.id,
-      value: current
+      value: current, 
+      markedForReview: false
     });
   }
 

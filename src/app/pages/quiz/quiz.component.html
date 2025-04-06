@@ -1,5 +1,4 @@
 <div class="flex gap-6 px-6 py-6">
-  <!-- Left: Question Area -->
   <div class="flex-1">
     <div class="flex justify-between items-center mb-2">
       <h2 class="text-lg font-semibold">Question {{ currentIndex + 1 }}</h2>
@@ -42,24 +41,14 @@
         Save & Next
       </button>
       <button
-        class="mt-4 px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600"
+        class="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600"
         (click)="endTest()"
       >
         END TEST
       </button>
     </div>
-
-<!--    <div class="flex justify-between mt-4">-->
-<!--      <button (click)="goPrev()" class="px-4 py-2 bg-gray-200 rounded" [disabled]="currentIndex === 0">-->
-<!--        Previous-->
-<!--      </button>-->
-<!--      <button (click)="goNext()" class="px-4 py-2 bg-blue-500 text-white rounded">-->
-<!--        Next-->
-<!--      </button>-->
-<!--    </div>-->
   </div>
 
-  <!-- Right: Navigation Panel -->
   <app-question-nav-panel />
 
 </div>

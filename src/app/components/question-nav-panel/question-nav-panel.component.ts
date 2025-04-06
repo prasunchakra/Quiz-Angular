@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StateService } from '../../core/services/state.service';
-
+import { AnswerStatus } from '../../core/enterface/answer-status.enum';
 @Component({
   standalone: true,
   selector: 'app-question-nav-panel',
@@ -10,9 +10,9 @@ import { StateService } from '../../core/services/state.service';
 })
 export class QuestionNavPanelComponent {
   private state = inject(StateService);
-
+  protected AnswerStatus = AnswerStatus;
   get questions() {
-    return this.state.questions();
+    return this.state.currentQuiz()?.questions || [];
   }
 
   get answers() {
@@ -25,11 +25,10 @@ export class QuestionNavPanelComponent {
 
   getStatus(index: number): string {
     const q = this.questions[index];
-    const a = this.answers.find(ans => ans.questionId === q.id);
+    const a = this.answers[q.id];
 
-    if (!a) return 'not-visited';
-    if (a.markedForReview) return 'marked';
-    if (a.value !== null && a.value !== undefined && a.value !== '') return 'answered';
-    return 'not-answered';
+    if (!a) return AnswerStatus.NOT_ANSWERED;
+    if (a.markedForReview) return AnswerStatus.MARKED;
+    return AnswerStatus.ANSWERED;
   }
 }

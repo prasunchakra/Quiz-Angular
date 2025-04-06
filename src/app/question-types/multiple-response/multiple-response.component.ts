@@ -8,9 +8,9 @@ import {StateService} from '../../core/services/state.service';
   imports: [CommonModule],
   template: `
     <div>
-      <p class="mb-4 font-medium">{{ question?.text }}</p>
+      <p class="mb-4 font-medium">{{ question.text }}</p>
       <div class="space-y-2">
-        <label *ngFor="let option of question?.options" class="block">
+        <label *ngFor="let option of question.options" class="block">
           <input
             type="checkbox"
             [value]="option"
@@ -30,7 +30,7 @@ export class MultipleResponseComponent {
 
   ngOnInit() {
     const saved = this.state.getAnswerForQuestion(this.question.id);
-    if (saved) {
+    if (saved && Array.isArray(saved.value)) {
       this.selected.set([...saved.value]);
     }
   }
@@ -45,7 +45,8 @@ export class MultipleResponseComponent {
 
     this.state.saveAnswer({
       questionId: this.question.id,
-      value: updated
+      value: updated,
+      markedForReview: false
     });
   }
 }
